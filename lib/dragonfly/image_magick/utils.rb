@@ -9,8 +9,16 @@ module Dragonfly
       include Configurable
       configurable_attr :convert_command, "convert"
       configurable_attr :identify_command, "identify"
+      configurable_attr :composite_command, "composite"
     
       private
+
+      def composite(temp_object, composite_files, args='', format=nil)
+        composite_files.map!{|f| quote(f) }
+        tempfile = new_tempfile(format)
+        run composite_command, "#{args} #{composite_files.join(' ')} #{quote(temp_object.path)} #{quote(tempfile.path)}"
+        tempfile
+      end
 
       def convert(temp_object=nil, args='', format=nil)
         tempfile = new_tempfile(format)
