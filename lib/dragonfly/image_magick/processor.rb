@@ -57,7 +57,12 @@ module Dragonfly
         convert(temp_object, "-colorspace Gray")
       end
       alias grayscale greyscale
-      
+
+      def watermark(temp_object, watermark_path, opts={})
+        gravity = GRAVITIES[opts[:gravity]]
+        composite(temp_object,[*watermark_path],"#{"-gravity #{gravity} " if gravity}")
+      end
+
       def resize_and_crop(temp_object, opts={})
         if !opts[:width] && !opts[:height]
           return temp_object
